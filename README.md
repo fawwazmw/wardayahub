@@ -525,7 +525,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Fawwaz Muhammad Wardaya**
 
-- Portfolio: [https://dev.wardaya.my.id]
+- Portfolio: [Personal Website Portfolio](https://dev.wardaya.my.id)
 - GitHub: [@fawwazmw](https://github.com/fawwazmw)
 - LinkedIn: [Fawwaz Mufid Wardaya](https://linkedin.com/in/fawwaz-mufid-wardaya)
 
