@@ -39,24 +39,28 @@ This isn't just another blog template - it's a **complete production system** th
 ## ✨ Key Features
 
 ### Content Management
+
 - 📝 **Strapi Headless CMS** - Intuitive admin panel for content editing
 - 🖼️ **Media Library** - Upload and manage images
 - 📋 **Draft/Publish Workflow** - Review before going live
 - 🏷️ **Categories & Tags** - Organize content effectively
 
 ### Frontend Performance  
+
 - ⚡ **Static Site Generation** - Pre-rendered HTML for instant loads
 - 🌍 **Global CDN** - Served from edge locations worldwide
 - 🖼️ **Optimized Assets** - Lazy loading and image optimization
 - 🔗 **Smart Prefetching** - Instant navigation between pages
 
 ### SEO & Discoverability
+
 - 🔍 **Complete Meta Tags** - Open Graph, Twitter Cards, and more
 - 📊 **JSON-LD Structured Data** - Rich snippets in search results
 - 🗺️ **Auto-Generated Sitemap** - Always up-to-date for search engines
 - ♿ **Accessibility First** - WCAG AA compliant
 
 ### Developer Experience
+
 - 🚀 **Auto-Deploy** - Push to GitHub → Live in minutes
 - 👁️ **Preview Deployments** - Test PRs before merging
 - 🔒 **Type Safety** - TypeScript with strict mode
@@ -70,31 +74,31 @@ This isn't just another blog template - it's a **complete production system** th
 
 ```
 ┌──────────────────────────────────────────────────┐
-│              End Users (Global)                   │
+│              End Users (Global)                  │
 └─────────────────┬────────────────────────────────┘
                   │
                   ↓ HTTPS
 ┌──────────────────────────────────────────────────┐
-│         Vercel Edge Network (CDN)                 │
-│         Serves pre-built HTML globally            │
+│         Vercel Edge Network (CDN)                │
+│         Serves pre-built HTML globally           │
 └─────────────────┬────────────────────────────────┘
                   │
                   ↓ Static Assets
 ┌──────────────────────────────────────────────────┐
-│              ASTRO FRONTEND                       │
-│                                                   │
+│              ASTRO FRONTEND                      │
+│                                                  │
 │  • Static Site Generation (SSG)                  │
 │  • React Islands (minimal JS)                    │
 │  • SEO Components                                │
 │  • Type-Safe API Integration                     │
-│                                                   │
-│  Build Time Only ──────────────┐                │
-└────────────────────────────────┼────────────────┘
+│                                                  │
+│  Build Time Only ──────────────┐                 │
+└────────────────────────────────┼─────────────────┘
                                  │ REST API
                                  ↓
 ┌──────────────────────────────────────────────────┐
-│            STRAPI CMS (Railway)                   │
-│                                                   │
+│            STRAPI CMS (Railway)                  │
+│                                                  │
 │  • Headless Content Management                   │
 │  • PostgreSQL Database                           │
 │  • REST API Endpoints                            │
@@ -106,6 +110,7 @@ This isn't just another blog template - it's a **complete production system** th
 ### Data Flow
 
 **Build Time (Static Generation):**
+
 ```
 Developer Push → GitHub → Vercel Webhook
     → Astro Fetches Data → Strapi API
@@ -113,12 +118,14 @@ Developer Push → GitHub → Vercel Webhook
 ```
 
 **Runtime (User Request):**
+
 ```
 User Request → CDN Serves HTML → Page Loads Instantly
 (No API calls at runtime - everything pre-rendered!)
 ```
 
 **Content Update:**
+
 ```
 Editor Publishes → Strapi Webhook → Vercel Rebuild
     → New Static Site → Live in 2-3 minutes
@@ -210,7 +217,7 @@ wardayahub-cms/                  # 🗄️ Strapi Backend (separate repo)
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Git
 
@@ -233,6 +240,7 @@ npm install
 #### 2. Set Up Environment Variables
 
 **Frontend (.env):**
+
 ```env
 PUBLIC_SITE_URL=http://localhost:4321
 PUBLIC_SITE_NAME=WardayaHub
@@ -242,6 +250,7 @@ STRAPI_API_TOKEN=
 ```
 
 **Backend (.env):**
+
 ```env
 HOST=0.0.0.0
 PORT=1337
@@ -268,7 +277,7 @@ npm run dev
 
 #### 4. Create Content
 
-1. Open Strapi admin: http://localhost:1337/admin
+1. Open Strapi admin: <http://localhost:1337/admin>
 2. Create first admin user
 3. Add content types (see `STRAPI_SETUP_GUIDE.md`)
 4. Create sample posts
@@ -276,7 +285,7 @@ npm run dev
 
 #### 5. View Site
 
-Visit http://localhost:4321 to see your blog!
+Visit <http://localhost:4321> to see your blog!
 
 ---
 
@@ -285,6 +294,7 @@ Visit http://localhost:4321 to see your blog!
 ### Deploy to Production
 
 See detailed guides:
+
 - **Vercel (Frontend)**: `DEPLOY_VERCEL.md`
 - **Railway (Backend)**: `DEPLOY_STRAPI_RAILWAY.md`  
 - **Complete Workflow**: `DEPLOYMENT_GUIDE.md`
@@ -292,6 +302,7 @@ See detailed guides:
 ### Quick Deploy Steps
 
 **1. Deploy Strapi to Railway:**
+
 ```bash
 # Push to GitHub
 git push origin main
@@ -304,6 +315,7 @@ git push origin main
 ```
 
 **2. Deploy Astro to Vercel:**
+
 ```bash
 # Push to GitHub
 git push origin main
@@ -315,6 +327,7 @@ git push origin main
 ```
 
 **3. Connect Services:**
+
 - Update `STRAPI_URL` in Vercel
 - Update `CLIENT_URL` in Railway
 - Redeploy both
@@ -322,6 +335,7 @@ git push origin main
 ### Auto-Deploy
 
 Both platforms auto-deploy on push to `main`:
+
 - ✅ Push code → GitHub
 - ✅ Webhook triggers build
 - ✅ Live in 1-3 minutes
@@ -335,6 +349,7 @@ Both platforms auto-deploy on push to `main`:
 **Problem:** Astro generates static HTML, but content changes in Strapi
 
 **Solution:**  
+
 - Vercel deployment hooks in Strapi
 - Content publish triggers automatic rebuild
 - Fresh content in 2-3 minutes
@@ -346,6 +361,7 @@ Both platforms auto-deploy on push to `main`:
 **Problem:** Strapi returns deeply nested JSON
 
 **Solution:**
+
 - Dual type system (raw Strapi types + normalized app types)
 - Normalization layer transforms API responses
 - Clean component interfaces
@@ -357,6 +373,7 @@ Both platforms auto-deploy on push to `main`:
 **Problem:** Need unique meta tags, structured data, social previews
 
 **Solution:**
+
 - Reusable SEO component with props
 - Automatic JSON-LD generation
 - Per-page canonical URLs
@@ -369,6 +386,7 @@ Both platforms auto-deploy on push to `main`:
 **Problem:** Fast image delivery globally, different sizes needed
 
 **Solution:**
+
 - Strapi media library on Railway
 - URL normalization in API client
 - Lazy loading with proper attributes
@@ -381,6 +399,7 @@ Both platforms auto-deploy on push to `main`:
 **Problem:** Vercel preview URLs are dynamic (`*.vercel.app`)
 
 **Solution:**
+
 - Wildcard CORS for Vercel previews
 - Environment-based configuration
 - Clear documentation of all variables
@@ -392,6 +411,7 @@ Both platforms auto-deploy on push to `main`:
 **Problem:** SQLite won't work on Railway (ephemeral filesystem)
 
 **Solution:**
+
 - Configured PostgreSQL from the start
 - Used Railway's managed database
 - Proper SSL configuration
@@ -403,17 +423,20 @@ Both platforms auto-deploy on push to `main`:
 ## 📈 Performance Metrics
 
 **Lighthouse Scores:**
+
 - ⚡ Performance: 95-100
 - ♿ Accessibility: 95-100  
 - 🎯 Best Practices: 100
 - 🔍 SEO: 100
 
 **Core Web Vitals:**
+
 - LCP: < 1.2s (Excellent)
 - FID: < 50ms (Excellent)
 - CLS: < 0.1 (Excellent)
 
 **Bundle Size:**
+
 - Initial JS: ~15KB gzipped
 - CSS: ~5KB gzipped
 - Total: ~50KB (without images)
@@ -425,11 +448,13 @@ Both platforms auto-deploy on push to `main`:
 This project includes **comprehensive documentation** (25+ files):
 
 ### Quick Start
+
 - `START_HERE.md` - First steps
 - `QUICKSTART.md` - Quick reference
 - `QUICKSTART_BLOG.md` - Blog features
 
 ### Development
+
 - `PROJECT_SCOPE.md` - Project goals
 - `ARCHITECTURE.md` - System design
 - `STRUCTURE.md` - File organization
@@ -437,15 +462,18 @@ This project includes **comprehensive documentation** (25+ files):
 - `TESTING_GUIDE.md` - Testing procedures
 
 ### Strapi Setup
+
 - `STRAPI_QUICK_SETUP.md` - Quick guide
 - `STRAPI_SETUP_GUIDE.md` - Detailed guide
 
 ### SEO
+
 - `SEO_GUIDE.md` - Complete SEO docs
 - `SEO_CHECKLIST.md` - Quick checklist
 - `SEO_COMPLETE.md` - Implementation summary
 
 ### Deployment
+
 - `DEPLOYMENT_GUIDE.md` ⭐ - Complete workflow
 - `DEPLOY_VERCEL.md` - Vercel setup
 - `DEPLOY_STRAPI_RAILWAY.md` - Railway setup
@@ -453,6 +481,7 @@ This project includes **comprehensive documentation** (25+ files):
 - `DEPLOYMENT_COMPLETE.md` - Summary
 
 ### Reference
+
 - `BLOG_COMPLETE.md` - Blog features
 - `SEO_COMPLETE.md` - SEO features
 - `COMPLETE_SETUP_STATUS.md` - Overall status
@@ -496,9 +525,9 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Fawwaz Muhammad Wardaya**
 
-- Portfolio: [Your Portfolio URL]
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
+- Portfolio: [https://dev.wardaya.my.id]
+- GitHub: [@fawwazmw](https://github.com/fawwazmw)
+- LinkedIn: [Fawwaz Mufid Wardaya](https://linkedin.com/in/fawwaz-mufid-wardaya)
 
 ---
 
