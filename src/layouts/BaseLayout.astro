@@ -1,0 +1,252 @@
+---
+import SEO from '../components/seo/SEO.astro';
+import type { SEOProps } from '../types/seo';
+
+interface Props {
+  seo: SEOProps;
+}
+
+const { seo } = Astro.props;
+const siteName = import.meta.env.PUBLIC_SITE_NAME || 'WardayaHub';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0066cc" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href={import.meta.env.STRAPI_URL} crossorigin />
+    
+    <!-- Generator -->
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO -->
+    <SEO {...seo} />
+  </head>
+  <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+    
+    <header role="banner">
+      <nav role="navigation" aria-label="Main navigation">
+        <a href="/" aria-label={`${siteName} home`} class="logo">
+          {siteName}
+        </a>
+        <div class="nav-links">
+          <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>
+            Home
+          </a>
+          <a href="/blog" aria-current={Astro.url.pathname.startsWith('/blog') ? 'page' : undefined}>
+            Blog
+          </a>
+        </div>
+      </nav>
+    </header>
+    
+    <main id="main-content" role="main" tabindex="-1">
+      <slot />
+    </main>
+    
+    <footer role="contentinfo">
+      <div class="footer-content">
+        <p>&copy; {new Date().getFullYear()} {siteName}. All rights reserved.</p>
+        <nav aria-label="Footer navigation">
+          <a href="/blog">Blog</a>
+          <span aria-hidden="true">•</span>
+          <a href="/">Home</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :global(html) {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #ffffff;
+    color: #333;
+    scroll-behavior: smooth;
+  }
+  
+  :global(body) {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.6;
+  }
+
+  /* Skip to main content link for keyboard navigation */
+  .skip-to-main {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #0066cc;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    z-index: 100;
+  }
+
+  .skip-to-main:focus {
+    top: 0;
+  }
+  
+  header {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #e5e5e5;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #333;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  nav a:focus {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+  }
+  
+  .logo {
+    margin-left: 0 !important;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  
+  nav a:hover,
+  nav a:focus {
+    color: #0066cc;
+  }
+
+  nav a[aria-current="page"] {
+    color: #0066cc;
+    border-bottom: 2px solid #0066cc;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+  }
+  
+  main {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  main:focus {
+    outline: none;
+  }
+  
+  footer {
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid #e5e5e5;
+    margin-top: 4rem;
+    background: #f9fafb;
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  footer p {
+    margin: 0 0 1rem 0;
+  }
+
+  footer nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  footer nav a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+
+  footer nav a:hover,
+  footer nav a:focus {
+    color: #0066cc;
+    text-decoration: underline;
+  }
+
+  /* Focus visible for better accessibility */
+  :global(*:focus-visible) {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+  }
+
+  /* Ensure images are accessible */
+  :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Ensure headings maintain proper hierarchy */
+  :global(h1, h2, h3, h4, h5, h6) {
+    line-height: 1.2;
+    margin-top: 0;
+  }
+  
+  @media (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .logo {
+      margin-bottom: 1rem;
+    }
+
+    .nav-links {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    main {
+      padding: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) {
+      scroll-behavior: auto;
+    }
+    
+    :global(*) {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

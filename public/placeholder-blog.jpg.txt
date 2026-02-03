@@ -1,0 +1,4 @@
+This is a placeholder for blog images.
+You can replace this with an actual placeholder image or use a service like:
+- https://placehold.co/600x400/0066cc/white?text=Blog+Post
+- https://via.placeholder.com/600x400

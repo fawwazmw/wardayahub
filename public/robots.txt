@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://wardayahub.vercel.app/sitemap-index.xml
+
+# Disallow crawling of specific paths (if needed)
+# Disallow: /api/
+# Disallow: /admin/

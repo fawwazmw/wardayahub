@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/blog/PostCard.astro';
+import EmptyState from '../../components/blog/EmptyState.astro';
+import ErrorState from '../../components/blog/ErrorState.astro';
+import { getCategoryBySlug, getPostsByCategory, getCategories } from '../../lib/blog';
+import type { Post, Category } from '../../types';
+
+export async function getStaticPaths() {
+  try {
+    const categories = await getCategories();
+    return categories.map((category) => ({
+      params: { slug: category.slug },
+    }));
+  } catch (error) {
+    console.error('Error generating category paths:', error);
+    return [];
+  }
+}
+
+const { slug } = Astro.params;
+
+let category: Category | null = null;
+let posts: Post[] = [];
+let error: string | null = null;
+
+try {
+  category = await getCategoryBySlug(slug!);
+  if (!category) {
+    error = 'Category not found';
+  } else {
+    posts = await getPostsByCategory(slug!);
+  }
+} catch (e) {
+  error = e instanceof Error ? e.message : 'Failed to load category';
+  console.error('Error loading category:', e);
+}
+---
+
+{category ? (
+  <BaseLayout
+    seo={{
+      title: `${category.name} - WardayaHub`,
+      description: category.description || `Browse all ${category.name} posts`,
+      type: 'website',
+    }}
+  >
+    <div class="category-header">
+      <h1>{category.name}</h1>
+      {category.description && (
+        <p class="subtitle">{category.description}</p>
+      )}
+      <p class="post-count">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+    </div>
+
+    {posts.length === 0 ? (
+      <EmptyState message={`No posts in ${category.name} yet.`} />
+    ) : (
+      <div class="posts-grid">
+        {posts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    )}
+
+    <div class="category-footer">
+      <a href="/blog" class="btn-back">← All Posts</a>
+    </div>
+  </BaseLayout>
+) : (
+  <BaseLayout
+    seo={{
+      title: 'Category Not Found - WardayaHub',
+      description: 'The requested category could not be found.',
+    }}
+  >
+    <ErrorState error={error || 'Category not found'} />
+  </BaseLayout>
+)}
+
+<style>
+  .category-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #e5e5e5;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+    color: #111;
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+    color: #666;
+    margin: 0 0 1rem 0;
+  }
+
+  .post-count {
+    font-size: 0.875rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .category-footer {
+    text-align: center;
+    padding: 2rem 0;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .btn-back {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: white;
+    color: #0066cc;
+    border: 2px solid #0066cc;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-back:hover {
+    background: #0066cc;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,223 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/blog/PostCard.astro';
+import { getPosts } from '../lib/blog';
+import type { Post } from '../types';
+
+const siteDescription = import.meta.env.PUBLIC_SITE_DESCRIPTION || 'Headless CMS Blog Platform';
+
+let recentPosts: Post[] = [];
+try {
+  const result = await getPosts(1, 3);
+  recentPosts = result.posts;
+} catch (e) {
+  console.error('Error loading recent posts:', e);
+}
+---
+
+<BaseLayout
+  seo={{
+    title: 'Home - WardayaHub',
+    description: siteDescription,
+    type: 'website',
+  }}
+>
+  <div class="hero">
+    <h1>Welcome to WardayaHub</h1>
+    <p class="subtitle">{siteDescription}</p>
+    <div class="cta">
+      <a href="/blog" class="btn-primary">Read Blog</a>
+      <a href="/category" class="btn-secondary">Browse Categories</a>
+    </div>
+  </div>
+
+  <section class="features">
+    <h2>Features</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>⚡ Fast Performance</h3>
+        <p>Built with Astro for lightning-fast static site generation</p>
+      </div>
+      <div class="feature-card">
+        <h3>📝 Easy Content Management</h3>
+        <p>Powered by Strapi headless CMS for seamless content editing</p>
+      </div>
+      <div class="feature-card">
+        <h3>🎨 Modern Stack</h3>
+        <p>TypeScript, React, and best practices for scalable development</p>
+      </div>
+      <div class="feature-card">
+        <h3>🔍 SEO Optimized</h3>
+        <p>Built-in SEO features and Open Graph support</p>
+      </div>
+    </div>
+  </section>
+
+  {recentPosts.length > 0 && (
+    <section class="recent-posts">
+      <h2>Recent Posts</h2>
+      <div class="posts-grid">
+        {recentPosts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+      <div class="view-all">
+        <a href="/blog" class="btn-view-all">View All Posts →</a>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #111;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  .cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.75rem 2rem;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: #0066cc;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #0052a3;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: #0066cc;
+    border: 2px solid #0066cc;
+  }
+
+  .btn-secondary:hover {
+    background: #f0f7ff;
+    transform: translateY(-2px);
+  }
+
+  .features {
+    margin-top: 4rem;
+  }
+
+  .features h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .feature-card {
+    padding: 2rem;
+    background: #f9fafb;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e5e5;
+  }
+
+  .feature-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #111;
+  }
+
+  .feature-card p {
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .recent-posts {
+    margin-top: 4rem;
+    padding-top: 4rem;
+    border-top: 2px solid #e5e5e5;
+  }
+
+  .recent-posts h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .view-all {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .btn-view-all {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: white;
+    color: #0066cc;
+    border: 2px solid #0066cc;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-view-all:hover {
+    background: #0066cc;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .cta {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

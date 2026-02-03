@@ -1,0 +1,68 @@
+---
+interface Props {
+  message?: string;
+}
+
+const { message = 'No posts found.' } = Astro.props;
+---
+
+<div class="empty-state">
+  <svg
+    class="empty-icon"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+    />
+  </svg>
+  <h3>{message}</h3>
+  <p>Check back later or try adjusting your filters.</p>
+  <a href="/" class="btn-home">Go Home</a>
+</div>
+
+<style>
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .empty-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    color: #ccc;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: #666;
+    margin: 0 0 2rem 0;
+  }
+
+  .btn-home {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: #0066cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+
+  .btn-home:hover {
+    background: #0052a3;
+  }
+</style>
