@@ -29,112 +29,205 @@ const siteDescription = import.meta.env.PUBLIC_SITE_DESCRIPTION || 'Blog posts';
     type: 'website',
   }}
 >
-  <div class="blog-header">
-    <h1>Blog</h1>
-    <p class="subtitle">Discover our latest articles and insights</p>
-  </div>
-
-  {error ? (
-    <ErrorState error={error} />
-  ) : posts.length === 0 ? (
-    <EmptyState message="No blog posts available yet." />
-  ) : (
-    <>
-      <div class="posts-grid">
-        {posts.map((post) => (
-          <PostCard post={post} />
-        ))}
+  <div class="blog-page">
+    <div class="container">
+      <div class="page-header">
+        <div class="header-content">
+          <div class="header-badge">
+            <svg class="badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+            <span>Blog</span>
+          </div>
+          
+          <h1 class="page-title">Latest <span class="gradient-text">Articles</span></h1>
+          <p class="page-description">
+            Discover insights, tutorials, and stories from our blog
+          </p>
+        </div>
       </div>
 
-      {pagination && pagination.pageCount > 1 && (
-        <div class="pagination">
-          <p class="pagination-info">
-            Showing page {pagination.page} of {pagination.pageCount}
-          </p>
-          <div class="pagination-actions">
-            {pagination.page > 1 && (
-              <a href={`/blog?page=${pagination.page - 1}`} class="btn-page">
-                Previous
-              </a>
-            )}
-            {pagination.page < pagination.pageCount && (
-              <a href={`/blog?page=${pagination.page + 1}`} class="btn-page">
-                Next
-              </a>
-            )}
+      {error ? (
+        <ErrorState error={error} />
+      ) : posts.length === 0 ? (
+        <EmptyState message="No blog posts available yet." />
+      ) : (
+        <>
+          <div class="posts-grid">
+            {posts.map((post) => (
+              <PostCard post={post} />
+            ))}
           </div>
-        </div>
+
+          {pagination && pagination.pageCount > 1 && (
+            <div class="pagination">
+              <div class="pagination-info">
+                <span class="pagination-text">
+                  Page <strong>{pagination.page}</strong> of <strong>{pagination.pageCount}</strong>
+                </span>
+                <span class="pagination-separator">•</span>
+                <span class="pagination-text">
+                  <strong>{pagination.total}</strong> {pagination.total === 1 ? 'article' : 'articles'}
+                </span>
+              </div>
+              
+              <div class="pagination-controls">
+                {pagination.page > 1 && (
+                  <a href={`/blog?page=${pagination.page - 1}`} class="btn btn-outline">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M19 12H5m7 7l-7-7 7-7"/>
+                    </svg>
+                    <span>Previous</span>
+                  </a>
+                )}
+                
+                {pagination.page < pagination.pageCount && (
+                  <a href={`/blog?page=${pagination.page + 1}`} class="btn btn-outline">
+                    <span>Next</span>
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M5 12h14m-7-7l7 7-7 7"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </>
       )}
-    </>
-  )}
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
-  .blog-header {
+  .blog-page {
+    padding: var(--spacing-3xl) 0;
+  }
+
+  /* Page Header */
+  .page-header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: var(--spacing-3xl);
   }
 
-  h1 {
-    font-size: 2.5rem;
-    margin: 0 0 0.5rem 0;
-    color: #111;
+  .header-content {
+    max-width: 700px;
+    margin: 0 auto;
   }
 
-  .subtitle {
-    font-size: 1.125rem;
-    color: #666;
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: hsl(var(--color-muted));
+    border: 1px solid hsl(var(--color-border));
+    border-radius: var(--radius-2xl);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: hsl(var(--color-foreground));
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .badge-icon {
+    width: 16px;
+    height: 16px;
+    color: hsl(var(--color-primary));
+  }
+
+  .page-title {
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 var(--spacing-md) 0;
+    color: hsl(var(--color-foreground));
+  }
+
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .page-description {
+    font-size: var(--text-lg);
+    color: hsl(var(--color-muted-foreground));
+    line-height: 1.6;
     margin: 0;
   }
 
+  /* Posts Grid */
   .posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-3xl);
   }
 
+  /* Pagination */
   .pagination {
-    text-align: center;
-    padding: 2rem 0;
-    border-top: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-2xl) 0;
+    border-top: 1px solid hsl(var(--color-border));
   }
 
   .pagination-info {
-    color: #666;
-    margin-bottom: 1rem;
-  }
-
-  .pagination-actions {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--text-sm);
+    color: hsl(var(--color-muted-foreground));
   }
 
-  .btn-page {
-    padding: 0.75rem 2rem;
-    background: white;
-    color: #0066cc;
-    border: 2px solid #0066cc;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
+  .pagination-separator {
+    color: hsl(var(--color-border));
   }
 
-  .btn-page:hover {
-    background: #0066cc;
-    color: white;
+  .pagination-controls {
+    display: flex;
+    gap: var(--spacing-md);
   }
 
+  /* Responsive */
   @media (max-width: 768px) {
-    h1 {
-      font-size: 2rem;
+    .blog-page {
+      padding: var(--spacing-2xl) 0;
+    }
+
+    .page-title {
+      font-size: var(--text-3xl);
+    }
+
+    .page-description {
+      font-size: var(--text-base);
     }
 
     .posts-grid {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: var(--spacing-lg);
+    }
+
+    .pagination-info {
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+
+    .pagination-separator {
+      display: none;
+    }
+
+    .pagination-controls {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .pagination-btn {
+      width: 100%;
+      justify-content: center;
     }
   }
 </style>

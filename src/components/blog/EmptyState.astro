@@ -22,13 +22,13 @@ const { message = 'No posts found.' } = Astro.props;
   </svg>
   <h3>{message}</h3>
   <p>Check back later or try adjusting your filters.</p>
-  <a href="/" class="btn-home">Go Home</a>
+  <a href="/" class="btn btn-primary">Go Home</a>
 </div>
 
 <style>
   .empty-state {
     text-align: center;
-    padding: 4rem 2rem;
+    padding: var(--spacing-3xl) var(--spacing-lg);
     max-width: 400px;
     margin: 0 auto;
   }
@@ -36,33 +36,21 @@ const { message = 'No posts found.' } = Astro.props;
   .empty-icon {
     width: 80px;
     height: 80px;
-    margin: 0 auto 1.5rem;
-    color: #ccc;
+    margin: 0 auto var(--spacing-lg);
+    color: hsl(var(--color-muted-foreground));
+    opacity: 0.5;
   }
 
   h3 {
-    font-size: 1.5rem;
-    color: #333;
-    margin: 0 0 0.5rem 0;
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: hsl(var(--color-foreground));
+    margin: 0 0 var(--spacing-sm) 0;
   }
 
   p {
-    color: #666;
-    margin: 0 0 2rem 0;
-  }
-
-  .btn-home {
-    display: inline-block;
-    padding: 0.75rem 2rem;
-    background: #0066cc;
-    color: white;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: background 0.3s ease;
-  }
-
-  .btn-home:hover {
-    background: #0052a3;
+    color: hsl(var(--color-muted-foreground));
+    margin: 0 0 var(--spacing-xl) 0;
+    font-size: var(--text-lg);
   }
 </style>

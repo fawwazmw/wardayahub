@@ -1,0 +1,74 @@
+---
+const repo = import.meta.env.PUBLIC_GISCUS_REPO;
+const repoId = import.meta.env.PUBLIC_GISCUS_REPO_ID;
+const category = import.meta.env.PUBLIC_GISCUS_CATEGORY;
+const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID;
+
+const isConfigured = repo && repoId && category && categoryId;
+---
+
+<div class="comments-section">
+  <div class="container">
+    <h2 class="comments-title">Comments</h2>
+    
+    {isConfigured ? (
+      <div class="giscus-wrapper">
+        <script is:inline
+          src="https://giscus.app/client.js"
+          data-repo={repo}
+          data-repo-id={repoId}
+          data-category={category}
+          data-category-id={categoryId}
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="preferred_color_scheme"
+          data-lang="en"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async
+        ></script>
+      </div>
+    ) : (
+      <div class="comments-placeholder">
+        <p>Comments are disabled or not configured.</p>
+        <p class="text-sm text-muted">Please configure Giscus variables in your .env file.</p>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .comments-section {
+    padding: var(--spacing-3xl) 0;
+    background: hsl(var(--color-background));
+    border-top: 1px solid hsl(var(--color-border));
+    margin-top: var(--spacing-3xl);
+  }
+
+  .comments-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xl);
+    color: hsl(var(--color-foreground));
+  }
+
+  .giscus-wrapper {
+    min-height: 200px;
+  }
+
+  .comments-placeholder {
+    padding: var(--spacing-xl);
+    text-align: center;
+    background: hsl(var(--color-muted) / 0.3);
+    border-radius: var(--radius-lg);
+    border: 1px dashed hsl(var(--color-border));
+  }
+
+  .text-muted {
+    color: hsl(var(--color-muted-foreground));
+    margin-top: var(--spacing-xs);
+  }
+</style>

@@ -1,6 +1,9 @@
 ---
 import SEO from '../components/seo/SEO.astro';
+import ThemeToggle from '../components/common/ThemeToggle.astro';
+import Search from '../components/common/Search';
 import type { SEOProps } from '../types/seo';
+import '../styles/design-system.css';
 
 interface Props {
   seo: SEOProps;
@@ -8,6 +11,7 @@ interface Props {
 
 const { seo } = Astro.props;
 const siteName = import.meta.env.PUBLIC_SITE_NAME || 'WardayaHub';
+const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -15,11 +19,11 @@ const siteName = import.meta.env.PUBLIC_SITE_NAME || 'WardayaHub';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0066cc" />
+    <meta name="theme-color" content="#3b82f6" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
     
     <!-- Preconnect to external domains for performance -->
     <link rel="preconnect" href={import.meta.env.STRAPI_URL} crossorigin />
@@ -34,216 +38,310 @@ const siteName = import.meta.env.PUBLIC_SITE_NAME || 'WardayaHub';
     <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-to-main">Skip to main content</a>
     
-    <header role="banner">
-      <nav role="navigation" aria-label="Main navigation">
-        <a href="/" aria-label={`${siteName} home`} class="logo">
-          {siteName}
-        </a>
-        <div class="nav-links">
-          <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>
-            Home
+    <header role="banner" class="site-header">
+      <div class="container">
+        <nav role="navigation" aria-label="Main navigation" class="nav">
+          <a href="/" aria-label={`${siteName} home`} class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 6l4 12 4-9 4 9 4-12" />
+              <circle cx="4" cy="6" r="2" fill="currentColor" class="logo-dot" />
+              <circle cx="20" cy="6" r="2" fill="currentColor" class="logo-dot" />
+              <circle cx="12" cy="9" r="2" fill="currentColor" class="logo-dot" />
+            </svg>
+            <span class="logo-text">{siteName}</span>
           </a>
-          <a href="/blog" aria-current={Astro.url.pathname.startsWith('/blog') ? 'page' : undefined}>
-            Blog
-          </a>
-        </div>
-      </nav>
+          <div class="nav-links">
+            <a href="/" class:list={['nav-link', { active: currentPath === '/' }]}>
+              Home
+            </a>
+            <a href="/blog" class:list={['nav-link', { active: currentPath.startsWith('/blog') }]}>
+              Blog
+            </a>
+            <div class="nav-separator"></div>
+            <Search client:idle />
+            <ThemeToggle />
+          </div>
+        </nav>
+      </div>
     </header>
     
     <main id="main-content" role="main" tabindex="-1">
       <slot />
     </main>
     
-    <footer role="contentinfo">
-      <div class="footer-content">
-        <p>&copy; {new Date().getFullYear()} {siteName}. All rights reserved.</p>
-        <nav aria-label="Footer navigation">
-          <a href="/blog">Blog</a>
-          <span aria-hidden="true">•</span>
-          <a href="/">Home</a>
-        </nav>
+    <footer role="contentinfo" class="site-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6l4 12 4-9 4 9 4-12" />
+                <circle cx="4" cy="6" r="2" fill="currentColor" class="logo-dot" />
+                <circle cx="20" cy="6" r="2" fill="currentColor" class="logo-dot" />
+                <circle cx="12" cy="9" r="2" fill="currentColor" class="logo-dot" />
+              </svg>
+              <span class="logo-text">{siteName}</span>
+            </div>
+            <p class="footer-tagline">Modern blog platform built with Astro & Strapi</p>
+          </div>
+          
+          <div class="footer-links">
+            <div class="footer-section">
+              <h3>Navigation</h3>
+              <nav aria-label="Footer navigation">
+                <a href="/">Home</a>
+                <a href="/blog">Blog</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p>&copy; {new Date().getFullYear()} {siteName}. All rights reserved.</p>
+          <p class="footer-credits">Crafted with ♥ using Astro & Strapi</p>
+        </div>
       </div>
     </footer>
   </body>
 </html>
 
 <style>
-  :global(html) {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #ffffff;
-    color: #333;
-    scroll-behavior: smooth;
-  }
-  
+  /* Global styles */
   :global(body) {
-    margin: 0;
-    padding: 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    line-height: 1.6;
   }
 
-  /* Skip to main content link for keyboard navigation */
+  /* Skip link for accessibility */
   .skip-to-main {
     position: absolute;
-    top: -40px;
-    left: 0;
-    background: #0066cc;
-    color: white;
-    padding: 0.5rem 1rem;
+    top: -100px;
+    left: var(--spacing-md);
+    background: hsl(var(--color-primary));
+    color: hsl(var(--color-primary-foreground));
+    padding: var(--spacing-sm) var(--spacing-lg);
     text-decoration: none;
-    z-index: 100;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    z-index: var(--z-tooltip);
+    transition: top var(--transition-fast);
   }
 
   .skip-to-main:focus {
-    top: 0;
+    top: var(--spacing-md);
   }
   
-  header {
-    padding: 1rem 2rem;
-    border-bottom: 1px solid #e5e5e5;
-    background: white;
+  /* Header */
+  .site-header {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: var(--z-sticky);
+    background: hsl(var(--color-background) / 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid hsl(var(--color-border));
+    transition: all var(--transition-base);
   }
   
-  nav {
-    max-width: 1200px;
-    margin: 0 auto;
+  .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  nav a {
-    text-decoration: none;
-    color: #333;
-    margin-left: 1.5rem;
-    font-weight: 500;
-    transition: color 0.2s ease;
-  }
-
-  nav a:focus {
-    outline: 2px solid #0066cc;
-    outline-offset: 2px;
+    padding: var(--spacing-lg) 0;
   }
   
   .logo {
-    margin-left: 0 !important;
-    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: hsl(var(--color-foreground));
+    font-size: var(--text-xl);
     font-weight: 700;
-  }
-  
-  nav a:hover,
-  nav a:focus {
-    color: #0066cc;
+    transition: opacity var(--transition-fast);
   }
 
-  nav a[aria-current="page"] {
-    color: #0066cc;
-    border-bottom: 2px solid #0066cc;
+  .logo:hover {
+    opacity: 0.8;
+  }
+
+  .logo-icon {
+    width: 24px;
+    height: 24px;
+    color: hsl(var(--color-primary));
+  }
+
+  .logo-dot {
+    opacity: 0.5;
+  }
+
+  .logo-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .nav-links {
     display: flex;
-    gap: 0;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .nav-separator {
+    width: 1px;
+    height: 24px;
+    background-color: hsl(var(--color-border));
+    margin: 0 var(--spacing-xs);
   }
   
+  .nav-link {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    text-decoration: none;
+    color: hsl(var(--color-muted-foreground));
+    font-weight: 500;
+    font-size: var(--text-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    position: relative;
+  }
+
+  .nav-link:hover {
+    color: hsl(var(--color-foreground));
+    background: hsl(var(--color-accent));
+  }
+
+  .nav-link.active {
+    color: hsl(var(--color-primary));
+    background: hsl(var(--color-accent));
+  }
+
+  .nav-link:focus-visible {
+    outline: 2px solid hsl(var(--color-ring));
+    outline-offset: 2px;
+  }
+  
+  /* Main content */
   main {
     flex: 1;
-    max-width: 1200px;
     width: 100%;
-    margin: 0 auto;
-    padding: 2rem;
   }
 
   main:focus {
     outline: none;
   }
   
-  footer {
-    padding: 2rem;
-    text-align: center;
-    border-top: 1px solid #e5e5e5;
-    margin-top: 4rem;
-    background: #f9fafb;
+  /* Footer */
+  .site-footer {
+    margin-top: var(--spacing-3xl);
+    background: hsl(var(--color-muted) / 0.3);
+    border-top: 1px solid hsl(var(--color-border));
   }
 
   .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-3xl);
+    padding: var(--spacing-3xl) 0 var(--spacing-2xl) 0;
   }
 
-  footer p {
-    margin: 0 0 1rem 0;
-  }
-
-  footer nav {
+  .footer-brand {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .footer-logo {
+    display: flex;
     align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: hsl(var(--color-foreground));
   }
 
-  footer nav a {
-    color: #666;
+  .footer-logo .logo-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .footer-tagline {
+    color: hsl(var(--color-muted-foreground));
+    font-size: var(--text-sm);
+    max-width: 320px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: var(--spacing-2xl);
+  }
+
+  .footer-section h3 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: hsl(var(--color-foreground));
+  }
+
+  .footer-section nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .footer-section a {
+    color: hsl(var(--color-muted-foreground));
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
   }
 
-  footer nav a:hover,
-  footer nav a:focus {
-    color: #0066cc;
-    text-decoration: underline;
+  .footer-section a:hover {
+    color: hsl(var(--color-primary));
   }
 
-  /* Focus visible for better accessibility */
-  :global(*:focus-visible) {
-    outline: 2px solid #0066cc;
-    outline-offset: 2px;
+  .footer-bottom {
+    padding: var(--spacing-xl) 0;
+    border-top: 1px solid hsl(var(--color-border));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-sm);
+    color: hsl(var(--color-muted-foreground));
   }
 
-  /* Ensure images are accessible */
-  :global(img) {
-    max-width: 100%;
-    height: auto;
+  .footer-credits {
+    font-size: var(--text-xs);
   }
 
-  /* Ensure headings maintain proper hierarchy */
-  :global(h1, h2, h3, h4, h5, h6) {
-    line-height: 1.2;
-    margin-top: 0;
-  }
-  
+  /* Responsive */
   @media (max-width: 768px) {
-    nav {
+    .nav {
       flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .logo {
-      margin-bottom: 1rem;
+      gap: var(--spacing-lg);
+      padding: var(--spacing-md) 0;
     }
 
     .nav-links {
       width: 100%;
       justify-content: center;
     }
-    
-    main {
-      padding: 1rem;
+
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-2xl);
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      text-align: center;
     }
   }
 
+  /* Accessibility */
   @media (prefers-reduced-motion: reduce) {
-    :global(html) {
-      scroll-behavior: auto;
-    }
-    
-    :global(*) {
+    * {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;

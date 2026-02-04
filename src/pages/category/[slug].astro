@@ -45,26 +45,48 @@ try {
       type: 'website',
     }}
   >
-    <div class="category-header">
-      <h1>{category.name}</h1>
-      {category.description && (
-        <p class="subtitle">{category.description}</p>
-      )}
-      <p class="post-count">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
-    </div>
+    <div class="category-page">
+      <div class="container">
+        <div class="category-header">
+          <div class="header-badge">
+            <svg class="badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+            </svg>
+            <span>Category</span>
+          </div>
+          
+          <h1 class="category-title">{category.name}</h1>
+          
+          {category.description && (
+            <p class="category-description">{category.description}</p>
+          )}
+          
+          <div class="category-meta">
+            <span class="post-count">
+              <strong>{posts.length}</strong> {posts.length === 1 ? 'article' : 'articles'}
+            </span>
+          </div>
+        </div>
 
-    {posts.length === 0 ? (
-      <EmptyState message={`No posts in ${category.name} yet.`} />
-    ) : (
-      <div class="posts-grid">
-        {posts.map((post) => (
-          <PostCard post={post} />
-        ))}
+        {posts.length === 0 ? (
+          <EmptyState message={`No posts in ${category.name} yet.`} />
+        ) : (
+          <div class="posts-grid">
+            {posts.map((post) => (
+              <PostCard post={post} />
+            ))}
+          </div>
+        )}
+
+        <div class="category-footer">
+          <a href="/blog" class="btn btn-outline">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5m7 7l-7-7 7-7"/>
+            </svg>
+            <span>Browse All Posts</span>
+          </a>
+        </div>
       </div>
-    )}
-
-    <div class="category-footer">
-      <a href="/blog" class="btn-back">← All Posts</a>
     </div>
   </BaseLayout>
 ) : (
@@ -79,71 +101,88 @@ try {
 )}
 
 <style>
+  .category-page {
+    padding: var(--spacing-3xl) 0;
+  }
+
   .category-header {
     text-align: center;
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 2px solid #e5e5e5;
+    margin-bottom: var(--spacing-3xl);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  h1 {
-    font-size: 2.5rem;
-    margin: 0 0 0.5rem 0;
-    color: #111;
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: hsl(var(--color-muted));
+    border: 1px solid hsl(var(--color-border));
+    border-radius: var(--radius-2xl);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: hsl(var(--color-foreground));
+    margin-bottom: var(--spacing-lg);
   }
 
-  .subtitle {
-    font-size: 1.125rem;
-    color: #666;
-    margin: 0 0 1rem 0;
+  .badge-icon {
+    width: 16px;
+    height: 16px;
+    color: hsl(var(--color-primary));
   }
 
-  .post-count {
-    font-size: 0.875rem;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0;
+  .category-title {
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 var(--spacing-md) 0;
+    color: hsl(var(--color-foreground));
+  }
+
+  .category-description {
+    font-size: var(--text-lg);
+    color: hsl(var(--color-muted-foreground));
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-lg) 0;
+  }
+
+  .category-meta {
+    display: inline-flex;
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: hsl(var(--color-card));
+    border: 1px solid hsl(var(--color-border));
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: hsl(var(--color-muted-foreground));
   }
 
   .posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-3xl);
   }
 
   .category-footer {
     text-align: center;
-    padding: 2rem 0;
-    border-top: 1px solid #e5e5e5;
-  }
-
-  .btn-back {
-    display: inline-block;
-    padding: 0.75rem 2rem;
-    background: white;
-    color: #0066cc;
-    border: 2px solid #0066cc;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-  }
-
-  .btn-back:hover {
-    background: #0066cc;
-    color: white;
+    padding: var(--spacing-xl) 0;
+    border-top: 1px solid hsl(var(--color-border));
   }
 
   @media (max-width: 768px) {
-    h1 {
-      font-size: 2rem;
+    .category-page {
+      padding: var(--spacing-2xl) 0;
+    }
+
+    .category-title {
+      font-size: var(--text-3xl);
     }
 
     .posts-grid {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: var(--spacing-lg);
     }
   }
 </style>
